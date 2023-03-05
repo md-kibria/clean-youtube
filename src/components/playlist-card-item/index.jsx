@@ -27,6 +27,7 @@ const PlaylistCardItem = ({ playlist }) => {
 
     const favHandle = () => {
         handleFavourite(playlistId)
+        setIsFavourite(!isFavourite)
     }
 
     useEffect(() => {

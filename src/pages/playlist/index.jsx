@@ -69,7 +69,7 @@ const Playlist = () => {
     useEffect(() => {
         if (favourites.length !== 0) {
             favourites.map((fav) => {
-                if (fav === playlistId) {
+                if (fav === id) {
                     setIsFavourite(true);
                 }
             });
