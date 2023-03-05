@@ -24,6 +24,7 @@ const usePlaylist = (arg) => {
     const favourites = useStoreState((state) => state.favourites.data);
 
     const { removePlaylist } = useStoreActions((state) => state.playlists);
+    const { removeFromRecents } = useStoreActions((state) => state.recents);
 
     const history = useNavigate();
 
@@ -35,7 +36,7 @@ const usePlaylist = (arg) => {
             playlists = favourites.map((fav) => playlistsData[fav]);
         } else if (arg.filter === "recents") {
             const recents = useStoreState((state) => state.recents.data);
-            playlists = recents.map((fav) => playlistsData[fav]);
+            playlists = recents.map((rec) => playlistsData[rec]);
         }
     }
 
@@ -48,17 +49,20 @@ const usePlaylist = (arg) => {
                 removeFromFavourite(playlistId);
                 toast.info("Remove from favourite", {
                     position: "bottom-left",
+                    autoClose: 2000
                 });
             } else {
                 addToFavourite(playlistId);
                 toast.info("Add to favourite", {
                     position: "bottom-left",
+                    autoClose: 2000
                 });
             }
         } else {
             addToFavourite(playlistId);
             toast.info("Add to favourite", {
                 position: "bottom-left",
+                autoClose: 2000
             });
         }
     };
@@ -68,9 +72,12 @@ const usePlaylist = (arg) => {
         if (confirm("Are you sure?")) {
             setPlaylist(initialPlaylist);
             removePlaylist(playlistId);
+            removeFromFavourite(playlistId)
+            removeFromRecents(playlistId)
             history(-1);
             toast.info("Playlist deleted successfully!", {
                 position: "bottom-left",
+                autoClose: 2000
             });
         }
     };

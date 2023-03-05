@@ -43,7 +43,8 @@ const Modal = ({open, handleClose}) => {
  
       if(t) {
         toast.success("Playlist added successfully", {
-          position: 'bottom-left'
+          position: 'bottom-left',
+          autoClose: 2000
         })
       }
     }
@@ -82,8 +83,8 @@ const Modal = ({open, handleClose}) => {
                 borderColor = '#18122B'
                 barColor = '#635985'
             /> }
-          <Button onClick={handleModalClose}>Cancel</Button>
-          <Button onClick={handleAdd}>Add Playlist</Button>
+          <Button onClick={handleModalClose} disabled={loading}>Cancel</Button>
+          <Button onClick={handleAdd} disabled={loading}>Add Playlist</Button>
         </DialogActions>
       </Dialog>
   );
