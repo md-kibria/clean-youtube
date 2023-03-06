@@ -47,20 +47,20 @@ const usePlaylist = (arg) => {
                 favourites.filter((fav) => fav === playlistId).length !== 0;
             if (isFav) {
                 removeFromFavourite(playlistId);
-                toast.info("Remove from favourite", {
+                toast.info("Removed from favorites", {
                     position: "bottom-left",
                     autoClose: 2000
                 });
             } else {
                 addToFavourite(playlistId);
-                toast.info("Add to favourite", {
+                toast.info("Added to favorites", {
                     position: "bottom-left",
                     autoClose: 2000
                 });
             }
         } else {
             addToFavourite(playlistId);
-            toast.info("Add to favourite", {
+            toast.info("Added to favorites", {
                 position: "bottom-left",
                 autoClose: 2000
             });
@@ -75,7 +75,7 @@ const usePlaylist = (arg) => {
             removeFromFavourite(playlistId)
             removeFromRecents(playlistId)
             history(-1);
-            toast.info("Playlist deleted successfully!", {
+            toast.info("Playlist was successfully deleted!", {
                 position: "bottom-left",
                 autoClose: 2000
             });

@@ -94,6 +94,7 @@ const Player = () => {
         }
     }, [videoId]);
 
+    // Responsive
     useEffect(() => {
         window.addEventListener("resize", () => {
             const innerWidth = window.innerWidth;
@@ -200,10 +201,18 @@ const Player = () => {
                     mt: "2rem",
                 }}
             >
-                <Button variant="contained" onClick={handlePrev}>
+                <Button
+                    variant="contained"
+                    onClick={handlePrev}
+                    disabled={videoIndex === 1}
+                >
                     <NavigateBeforeIcon /> Prev
                 </Button>
-                <Button variant="contained" onClick={handleNext}>
+                <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    disabled={videoIndex === playlistItems.length}
+                >
                     Next <NavigateNextIcon />
                 </Button>
             </Box>
