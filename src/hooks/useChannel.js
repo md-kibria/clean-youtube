@@ -2,7 +2,7 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const initialPlaylist = {
+const initialChannel = {
     playlistId: "",
     playlistTitle: "",
     playlistDescription: "",
@@ -14,55 +14,55 @@ const initialPlaylist = {
     publishedAt: "",
 };
 
-const usePlaylist = (arg) => {
-    const playlistsData = useStoreState((state) => state.playlists.data);
-    let playlists = null;
+const useChannel = (arg) => {
+    const channelData = useStoreState((state) => state.channels.data);
+    let channels = null;
 
     const { addToFavourite, removeFromFavourite } = useStoreActions(
         (state) => state.favourites
     );
-    const favourites = useStoreState((state) => state.favourites.data.playlists);
+    const favourites = useStoreState((state) => state.favourites.data.channels);
 
-
-    const { removePlaylist } = useStoreActions((state) => state.playlists);
+    const { removeChannel } = useStoreActions((state) => state.channels);
     const { removeFromRecents } = useStoreActions((state) => state.recents);
 
     const history = useNavigate();
 
     if (arg) {
         if (arg.filter === "home") {
-            playlists = Object.values(playlistsData);
+            channels = Object.values(channelData);
         } else if (arg.filter === "favourites") {
-            const favourites = useStoreState((state) => state.favourites.data.playlists);
-            playlists = favourites.map((fav) => playlistsData[fav]);
+            const favourites = useStoreState((state) => state.favourites.data.channels);
+            channels = favourites.map((fav) => channelData[fav]);
         } else if (arg.filter === "recents") {
-            const recents = useStoreState((state) => state.recents.data.playlists);
-            playlists = recents.map((rec) => playlistsData[rec]);
+            const recents = useStoreState((state) => state.recents.data.channels);
+            channels = recents.map((rec) => channelData[rec]);
         }
     } else {
-        playlists = Object.values(playlistsData);
+        // Like home
+        channels = Object.values(channelData);
     }
 
     // Handle favoutie
-    const handleFavourite = (playlistId) => {
+    const handleFavourite = (channelId) => {
         if (favourites.length !== 0) {
             let isFav =
-                favourites.filter((fav) => fav === playlistId).length !== 0;
+                favourites.filter((fav) => fav === channelId).length !== 0;
             if (isFav) {
-                removeFromFavourite({type: 'playlist', data: playlistId});
+                removeFromFavourite({type: 'channel', data: channelId});
                 toast.info("Removed from favorites", {
                     position: "bottom-left",
                     autoClose: 2000
                 });
             } else {
-                addToFavourite({type: 'playlist', data: playlistId});
+                addToFavourite({type: 'channel', data: channelId});
                 toast.info("Added to favorites", {
                     position: "bottom-left",
                     autoClose: 2000
                 });
             }
         } else {
-            addToFavourite({type: 'playlist', data: playlistId});
+            addToFavourite({type: 'channel', data: channelId});
             toast.info("Added to favorites", {
                 position: "bottom-left",
                 autoClose: 2000
@@ -71,14 +71,14 @@ const usePlaylist = (arg) => {
     };
 
     // Delete playlist
-    const handleDelete = (playlistId, setPlaylist) => {
+    const handleDelete = (channelId, setChannel) => {
         if (confirm("Are you sure?")) {
-            if(setPlaylist) setPlaylist(initialPlaylist);
-            removePlaylist(playlistId);
-            removeFromFavourite({type: 'playlist', data: playlistId})
-            removeFromRecents({type: 'playlist', data: playlistId})
-            if(setPlaylist) history(-1);
-            toast.info("Playlist was successfully deleted!", {
+            if(setChannel) setChannel(initialChannel);
+            removeChannel(channelId);
+            removeFromFavourite({type: 'channel', data: channelId})
+            removeFromRecents({type: 'channel', data: channelId})
+            if(setChannel) history(-1);
+            toast.info("Channel was successfully deleted!", {
                 position: "bottom-left",
                 autoClose: 2000
             });
@@ -86,11 +86,11 @@ const usePlaylist = (arg) => {
     };
 
     return {
-        playlists,
+        channels,
         handleFavourite,
         handleDelete,
-        initialPlaylist,
+        initialChannel,
     };
 };
 
-export default usePlaylist;
+export default useChannel;

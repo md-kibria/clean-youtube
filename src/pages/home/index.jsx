@@ -1,15 +1,22 @@
-import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import PlaylistPage from "../../components/playlist-page-component";
 import usePlaylist from "../../hooks/usePlaylist";
+import VideoPage from "../../components/video-page-component";
+import ChannelPage from "../../components/channel-page-component";
+import useVideo from "../../hooks/useVideo";
+import useChannel from "../../hooks/useChannel";
 
 const Home = () => {
-    const {playlists} = usePlaylist({filter: 'home'})
+    const {videos} = useVideo() 
+    const {playlists} = usePlaylist()
+    const {channels} = useChannel()
 
-    return <PlaylistPage 
-        title="Playlists" 
-        TitleIcon={PlaylistPlayIcon} 
-        playlists={playlists} 
-    />;
+    return (
+        <>
+            <VideoPage items={videos}/>
+            <PlaylistPage items={playlists}/>
+            <ChannelPage items={channels}/>
+        </>
+    );
 };
 
 export default Home;

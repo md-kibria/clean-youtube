@@ -4,15 +4,22 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Button, Container } from "@mui/material";
+import { Button, Container, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import HistoryIcon from "@mui/icons-material/History";
 import { Link } from "react-router-dom";
 import Modal from "../modal";
+import AddIcon from '@mui/icons-material/Add';
+
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import MovieFilterIcon from '@mui/icons-material/MovieFilter';
+import DnsIcon from '@mui/icons-material/Dns';
 
 const Navbar = () => {
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const [open, setOpen] = React.useState(false);
+    const [mob, setMob] = React.useState(false)
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,21 +29,44 @@ const Navbar = () => {
         setOpen(false);
     };
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+    
+      const handleCloseMenu = () => {
+        setAnchorEl(null);
+      };
+
+    const mobRes = () => {
+        const innerWidth = window.innerWidth;
+        if(innerWidth < 650) {
+            setMob(true)
+        } else {
+            setMob(false)
+        }
+    }
+
+    React.useEffect(() => {
+        mobRes()
+
+        window.addEventListener('resize', mobRes)
+    }, [])
+
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, marginBottom: "85px" }}>
             <AppBar
-                position="static"
+                position="fixed"
                 sx={{ background: "#443C68", textDecoration: "none" }}
-                to="/"
-                component={Link}
             >
                 <Container maxWidth={"lg"}>
                     <Toolbar>
                         
                         <Box sx={{height: '100%', flexGrow: 1,}}>
-                             <img src="/logo.png" alt="" height={50} style={{margin: "auto 0", display: 'block'}} />
+                            <Link to="/">
+                                <img src="/logo.png" alt="" height={50} style={{margin: "auto 0", display: 'block'}} />
+                            </Link>
                         </Box>
-                        {true ? (
+                        {!mob ? (
                             <>
                                 <IconButton
                                     color="primary"
@@ -62,6 +92,33 @@ const Navbar = () => {
                                 >
                                     <HistoryIcon />
                                 </IconButton>
+                                
+                                <Box style={{margin: '8px'}}></Box>
+
+                                <IconButton
+                                    color="primary"
+                                    sx={{ color: "#fff" }}
+                                    to="/videos"
+                                    component={Link}
+                                >
+                                    <VideoLibraryIcon />
+                                </IconButton>
+                                <IconButton
+                                    color="primary"
+                                    sx={{ color: "#fff" }}
+                                    to="/playlists"
+                                    component={Link}
+                                >
+                                    <DnsIcon />
+                                </IconButton>
+                                <IconButton
+                                    color="primary"
+                                    sx={{ color: "#fff" }}
+                                    to="/channels"
+                                    component={Link}
+                                >
+                                    <MovieFilterIcon />
+                                </IconButton>
                                 <Button
                                     variant="contained"
                                     sx={{ mx: 1, background: "#635985" }}
@@ -72,15 +129,78 @@ const Navbar = () => {
                                 </Button>
                             </>
                         ) : (
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
-                                <MenuIcon />
-                            </IconButton>
+                            <>
+                                <IconButton
+                                    size="large"
+                                    edge="start"
+                                    color="inherit"
+                                    aria-label="open drawer"
+                                    onClick={handleClick}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+
+                                <Menu
+                                id="simple-menu"
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClose={handleCloseMenu}
+                                style={{justifyContent: 'center'}}
+                                >
+                                    <MenuItem onClick={handleCloseMenu} component={Link} to="/" >
+                                        <ListItemIcon>
+                                            <HomeIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Home" />
+                                    </MenuItem>
+                                    <MenuItem onClick={handleCloseMenu} component={Link} to="/favourites">
+                                        <ListItemIcon>
+                                            <FavoriteIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Favourites" />
+                                    </MenuItem>
+                                    <MenuItem onClick={handleCloseMenu} component={Link} to="/recents">
+                                        <ListItemIcon>
+                                            <HistoryIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Recents" />
+                                    </MenuItem>
+                                    
+                                    <Box style={{margin: '8px'}}></Box>
+
+                                    <MenuItem onClick={handleCloseMenu} component={Link} to="/videos">
+                                        <ListItemIcon>
+                                            <VideoLibraryIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Videos" />
+                                    </MenuItem>
+                                    <MenuItem onClick={handleCloseMenu} component={Link} to="/playlists">
+                                        <ListItemIcon>
+                                            <DnsIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Playlists" />
+                                    </MenuItem>
+                                    <MenuItem onClick={handleCloseMenu} component={Link} to="/channels">
+                                        <ListItemIcon>
+                                            <MovieFilterIcon fontSize="small" />
+                                        </ListItemIcon>
+                                        <ListItemText primary="Channels" />
+                                    </MenuItem>
+                                    <MenuItem onClick={handleCloseMenu}>
+                                        <Button
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{ width: "100%", color: "#635985", borderColor: "#635985" }}
+                                            color="secondary"
+                                            onClick={handleClickOpen}
+                                            startIcon={<AddIcon/>}
+                                        >
+                                            Add New
+                                        </Button>
+                                    </MenuItem>
+                                </Menu>
+                            </>
                         )}
                     </Toolbar>
                 </Container>

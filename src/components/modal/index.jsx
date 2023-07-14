@@ -9,22 +9,49 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 import {ProgressBar} from 'react-loader-spinner'
 import { toast } from 'react-toastify';
+import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 const Modal = ({open, handleClose}) => {
+
+  const [type, setType] = React.useState('channel')
   const [input, setInput] = React.useState('')
-  const getPlaylist = useStoreActions(state => state.playlists.getPlaylist)
-  const {error, isLoading} = useStoreState(state => state.playlists)
+  // const getPlaylist = useStoreActions(state => state.playlists.getPlaylist)
+  const {videos: {getVideo}, playlists: {getPlaylist}, channels: {getChannel}} = useStoreActions(state => state)
+  
+  const {setError: setErrorV, setLoading: setLoadingV} = useStoreActions(state => state.videos)
+  const {setError: setErrorP, setLoading: setLoadingP} = useStoreActions(state => state.playlists)
+  const {setError: setErrorC, setLoading: setLoadingC} = useStoreActions(state => state.channels)
+
+  const {error: errorV, isLoading: isLoadingV} = useStoreState(state => state.videos)
+  const {error: errorP, isLoading: isLoadingP} = useStoreState(state => state.playlists)
+  const {error: errorC, isLoading: isLoadingC} = useStoreState(state => state.channels)
+
   const [loading, setLoading] = React.useState(false)
   const [t, setT] = React.useState(false)
 
   const handleAdd = async () => {
     let id = input
 
+    // Need to modify based on video and channel
     if(input.search(/youtube.com/i) !== -1) {
-      id = input.substring(input.search(/PL/))
+      if(input.search(/watch/i) !== -1) {
+        id = input.substring(input.search(/watch\?v=/)+8)
+      } else if(input.search(/playlist/i) !== -1) {
+        id = input.substring(input.search(/PL/))
+      } else if(input.search(/channel/i) !== -1) {
+        id = input.substring(input.search(/UC/))
+      }
     }
 
-    getPlaylist(id)
+    if(type === 'video') {
+      getVideo(id)
+    } else if(type === 'playlist') {
+      getPlaylist(id)
+    } else if(type === 'channel') {
+      getChannel(id)
+    } else {
+      throw new Error('Something went wrong! Please select a valid type.')
+    }
 
     setT(true)
 
@@ -33,43 +60,109 @@ const Modal = ({open, handleClose}) => {
   const handleModalClose = () => {
     // setInput('') // If I call this function, I need to clear error
     handleClose()
+
+    setErrorV('')
+    setErrorP('')
+    setErrorC('')
+
+    setLoadingV(false)
+    setLoadingP(false)
+    setLoadingC(false)
   }
 
   React.useEffect(() => {
-    setLoading(isLoading)
-    if(!error && !isLoading) {
-      setInput('')
-      handleClose()
- 
-      if(t) {
-        toast.success("Playlist added successfully", {
-          position: 'bottom-left',
-          autoClose: 2000
-        })
-      }
+    if(type === 'video') {
+      setLoading(isLoadingV)
+    } else if(type === 'playlist') {
+      setLoading(isLoadingP)
+    } else if(type === 'channel') {
+      setLoading(isLoadingC)
     }
-  }, [isLoading])
+    
+    if(type === 'video') {
+      if(!errorV && !isLoadingV) {
+        setInput('')
+        handleClose()
+   
+        if(t) {
+          toast.success("Video added successfully", {
+            position: 'bottom-left',
+            autoClose: 2000
+          })
+        }
+      }
+    } else if(type === 'playlist') {
+      if(!errorP && !isLoadingP) {
+        setInput('')
+        handleClose()
+   
+        if(t) {
+          toast.success("Playlist added successfully", {
+            position: 'bottom-left',
+            autoClose: 2000
+          })
+        }
+      }
+    } else if(type === 'channel') {
+      if(!errorC && !isLoadingC) {
+        setInput('')
+        handleClose()
+   
+        if(t) {
+          toast.success("Channel added successfully", {
+            position: 'bottom-left',
+            autoClose: 2000
+          })
+        }
+      }
+    } else {
+      throw new Error('Something went wrong! bla bla bla...')
+    }
+   
+  }, [isLoadingV, isLoadingP, isLoadingC])
+
+  React.useEffect(() => {
+    if(localStorage.getItem('cy-type')) {
+      setType(localStorage.getItem('cy-type'))
+    }
+  }, [])
+
+  const changeType = (e) => {
+    setType(e.target.value)
+
+    localStorage.setItem('cy-type', e.target.value)
+  }
 
   return (
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Playlist</DialogTitle>
+        <DialogTitle>Add New</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          To add a new playlist please insert the playlist id or playlist link.
-            Please make sure the link is correct. Otherwise we won't able to fetch the playlist information
+          {/* To add a new playlist please insert the playlist id or playlist link.
+            Please make sure the link is correct. Otherwise we won't able to fetch the playlist information */}
+          To add a new playlist or video or channel please insert the id or link.
+            Please make sure the link or id is correct. Otherwise we won't able to fetch the data.
           </DialogContentText>
+          <FormControl component="fieldset">
+            <RadioGroup row aria-label="id" name="id" value={type} onChange={changeType} style={{display: 'flex'}}>
+              <FormControlLabel value="video" control={<Radio />} label="Video" />
+              <FormControlLabel value="playlist" control={<Radio />} label="Playlist" />
+              <FormControlLabel value="channel" control={<Radio />} label="Channel" />
+            </RadioGroup>
+          </FormControl>
+          
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Playlist ID or Link"
+            label={type[0].toUpperCase() + type.slice(1) + " ID or Link"}
             type="email"
             fullWidth
             variant="standard"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            error={error}
-            helperText={error}
+            error={type === 'video' ? Boolean(errorV) : type === 'playlist' ? Boolean(errorP) : Boolean(errorC)}
+            helperText={type === 'video' ? errorV : type === 'playlist' ? errorP : errorC}
           />
         </DialogContent>
         <DialogActions sx={{position: 'relative', display: 'flex'}}>
@@ -84,7 +177,7 @@ const Modal = ({open, handleClose}) => {
                 barColor = '#635985'
             /> }
           <Button onClick={handleModalClose} disabled={loading}>Cancel</Button>
-          <Button onClick={handleAdd} disabled={loading}>Add Playlist</Button>
+          <Button onClick={handleAdd} disabled={loading}>Add</Button>
         </DialogActions>
       </Dialog>
   );

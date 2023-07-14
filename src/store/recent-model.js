@@ -1,13 +1,20 @@
 import { action, persist } from "easy-peasy";
 
 const RecentModel = persist({
-    data: [],
+    data: {
+        videos: [],
+        playlists: [],
+        channels: []
+    },
     addToRecents: action((state, payload) => {
-        state.data.unshift(payload);
-        state.data = state.data.splice(0, 5)
+        state.data[payload.type+'s'].unshift(payload.data)
+        state.data[payload.type+'s'] = state.data[payload.type+'s'].splice(0, 5)
     }),
     removeFromRecents: action((state, payload) => {
-        state.data = state.data.filter(rec => rec !== payload)
+        state.data = {
+            ...state.data,
+            [payload.type+'s']: state.data[payload.type+'s'].filter(rec => rec !== payload.data)
+        }
     })
 })
 

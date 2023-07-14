@@ -1,5 +1,5 @@
 import { action, persist,thunk } from "easy-peasy";
-import getPlaylist from "../api";
+import getPlaylist from "../api/playlist";
 
 const playlistModel = persist({
     data: {},
@@ -32,9 +32,19 @@ const playlistModel = persist({
         } finally {
             setLoading(false)
         }
+    }),
+    refreshPlaylist: thunk(async({addPlaylist, setLoading, setError},playlistId,{getState}) => {
+        setLoading(true)
+        try {
+            const playlist = await getPlaylist(playlistId)
+            addPlaylist(playlist)
+            setError('')
+        } catch(err) {
+            setError(err.response?.data?.error?.message || "Something went wrong")
+        } finally {
+            setLoading(false)
+        }
     })
 })
 
 export default playlistModel
-
-// https://youtube.googleapis.com/youtube/v3/playlists?part=snippet&id=PL_XxuZqN0xVD0op-QDEgyXFA4fRPChvkl&key=AIzaSyC58krCmnZqV8TYX4Eyog_b2lryHyxOIdY

@@ -1,0 +1,49 @@
+{
+  "kind": "youtube#channelListResponse",
+  "etag": "sMlZSyDh87-9HH5PX5FztB5-zoA",
+  "pageInfo": {
+    "totalResults": 1,
+    "resultsPerPage": 5
+  },
+  "items": [
+    {
+      "kind": "youtube#channel",
+      "etag": "a4WAXMd9o1lhNXNoVqB6SLT05TA",
+      "id": "UCrmHQdRbYKFsB602Duho4Tw",
+      "snippet": {
+        "title": "Stack Learner",
+        "description": "\n",
+        "customUrl": "@stacklearner",
+        "publishedAt": "2017-06-07T17:48:10Z",
+        "thumbnails": {
+          "default": {
+            "url": "https://yt3.ggpht.com/_laaRTCwOZ6hxLgPmjN8HnzzIlhWqyiwbD2kuofkSLx51FImoP0esGJVxyZm7oZ46Yby9MVz7g=s88-c-k-c0x00ffffff-no-rj",
+            "width": 88,
+            "height": 88
+          },
+          "medium": {
+            "url": "https://yt3.ggpht.com/_laaRTCwOZ6hxLgPmjN8HnzzIlhWqyiwbD2kuofkSLx51FImoP0esGJVxyZm7oZ46Yby9MVz7g=s240-c-k-c0x00ffffff-no-rj",
+            "width": 240,
+            "height": 240
+          },
+          "high": {
+            "url": "https://yt3.ggpht.com/_laaRTCwOZ6hxLgPmjN8HnzzIlhWqyiwbD2kuofkSLx51FImoP0esGJVxyZm7oZ46Yby9MVz7g=s800-c-k-c0x00ffffff-no-rj",
+            "width": 800,
+            "height": 800
+          }
+        },
+        "localized": {
+          "title": "Stack Learner",
+          "description": "\n"
+        },
+        "country": "BD"
+      },
+      "contentDetails": {
+        "relatedPlaylists": {
+          "likes": "",
+          "uploads": "UUrmHQdRbYKFsB602Duho4Tw"
+        }
+      }
+    }
+  ]
+}

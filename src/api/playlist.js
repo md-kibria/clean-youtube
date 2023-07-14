@@ -64,6 +64,3 @@ const getPlaylist = async (playlistId) => {
 };
 
 export default getPlaylist;
-
-
-// https://youtube.googleapis.com/youtube/v3/channels?id=UCrmHQdRbYKFsB602Duho4Tw&key=AIzaSyC58krCmnZqV8TYX4Eyog_b2lryHyxOIdY

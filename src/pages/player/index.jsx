@@ -10,6 +10,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import PlayerLoader from "../../components/loader/player-page";
 import { toast } from "react-toastify";
+import responsiveHeight from "../../utils/responsiveHeight";
 
 const Player = () => {
     const [loading, setLoading] = useState(true);
@@ -44,7 +45,7 @@ const Player = () => {
         setVideo(playlistItems[videoIndex - 2]);
         setVideoIndex(videoIndex - 1);
         navigate(
-            `/playlist/${playlistId}/video/${
+            `/playlists/${playlistId}/video/${
                 playlistItems[videoIndex - 2].contentDetails.videoId
             }`
         );
@@ -53,7 +54,7 @@ const Player = () => {
         setVideoIndex(videoIndex + 1);
         setVideo(playlistItems[videoIndex]);
         navigate(
-            `/playlist/${playlistId}/video/${playlistItems[videoIndex].contentDetails.videoId}`
+            `/playlists/${playlistId}/video/${playlistItems[videoIndex].contentDetails.videoId}`
         );
     };
 
@@ -96,24 +97,8 @@ const Player = () => {
 
     // Responsive
     useEffect(() => {
-        window.addEventListener("resize", () => {
-            const innerWidth = window.innerWidth;
-
-            if (innerWidth < 470 && innerWidth > 400) {
-                setSbWidth(350);
-                setSm(true);
-            }
-
-            if (innerWidth < 750) {
-                setPlHeight(400);
-            }
-            if (innerWidth < 550) {
-                setPlHeight(300);
-            }
-            if (innerWidth < 400) {
-                setPlHeight(200);
-            }
-        });
+        window.addEventListener("resize",() => responsiveHeight(setPlHeight, setSbWidth, setSm));
+        responsiveHeight(setPlHeight, setSbWidth, setSm)
     }, []);
 
     const opts = {
@@ -223,12 +208,13 @@ const Player = () => {
                 <a
                     target="_blank"
                     href={`https://youtube.com/channel/${channelId}`}
+                    style={{color: '#222', textDecoration: 'none', display: 'flex', alignItems: 'center'}}
                 >
                     <Avatar alt={channelTitle} src={logo.url} />
+                    <Typography variant="h6" ml="0.5rem" sx={{ flexGrow: 1 }}>
+                        {channelTitle}
+                    </Typography>
                 </a>
-                <Typography variant="h6" ml="0.5rem" sx={{ flexGrow: 1 }}>
-                    {channelTitle}
-                </Typography>
             </Box>
             <Typography variant="body1" color={"#aaa"} my="3px">
                 {new Date(videoPublishedAt).toDateString()}

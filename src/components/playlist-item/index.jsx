@@ -5,7 +5,7 @@ const PlaylistItem = ({video, indx, playlistId, sidebar, sm}) => {
     const {title, thumbnail, contentDetails:{videoPublishedAt, videoId}} = video
 
     return (
-        <Box sx={{height: '100px', background: '#eee', padding: '10px', my: '5px', display: 'flex', textDecoration: 'none'}} to={`/playlist/${playlistId}/video/${videoId}`} component={Link} >
+        <Box sx={{height: '100px', background: '#eee', padding: '10px', my: '5px', display: 'flex', textDecoration: 'none'}} to={`/playlists/${playlistId}/video/${videoId}`} component={Link} >
             <Typography sx={{my: 'auto', mr: '5px', color: '#777'}}>{String(indx).length == 1 ? '0'+indx : indx}</Typography>
             <img 
             height={'100%'} 

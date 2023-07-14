@@ -8,6 +8,11 @@ import Player from "./pages/player";
 import Playlist from "./pages/playlist";
 import Recents from "./pages/recents";
 import {ToastContainer} from 'react-toastify'
+import Channel from "./pages/channel";
+import Video from "./pages/video";
+import Videos from "./pages/videos";
+import Playlists from "./pages/playlists";
+import Channels from "./pages/channels";
 
 const App = () => {
     return (
@@ -15,13 +20,18 @@ const App = () => {
             <CssBaseline />
             <Navbar />
             <ToastContainer />
-            <Container maxWidth={"lg"}>
+            <Container maxWidth={"lg"} px="2rem">
                 <Routes>
                     <Route path="/" element={<Home/>} />
                     <Route path="/favourites" element={<Favourites/>} />
                     <Route path="/recents" element={<Recents />} />
-                    <Route path="/playlist/:id" element={<Playlist />} />
-                    <Route path="/playlist/:playlistId/video/:videoId" element={<Player />} />
+                    <Route path="/videos" element={<Videos />} />
+                    <Route path="/videos/:id" element={<Video />} />
+                    <Route path="/playlists" element={<Playlists />} />
+                    <Route path="/playlists/:id" element={<Playlist />} />
+                    <Route path="/channels" element={<Channels />} />
+                    <Route path="/channels/:id" element={<Channel />} />
+                    <Route path="/playlists/:playlistId/video/:videoId" element={<Player />} />
                     <Route path="/404/:msg" element={<NotFound />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
