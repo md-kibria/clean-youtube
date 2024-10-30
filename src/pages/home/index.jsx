@@ -12,9 +12,9 @@ const Home = () => {
 
     return (
         <>
-            <VideoPage items={videos}/>
-            <PlaylistPage items={playlists}/>
-            <ChannelPage items={channels}/>
+            <VideoPage items={videos.reverse().slice(0, 3)}/>
+            <PlaylistPage items={playlists.reverse().slice(0, 3)}/>
+            <ChannelPage items={channels.reverse().slice(0, 3)}/>
         </>
     );
 };

@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import DnsIcon from '@mui/icons-material/Dns';
+import Search from "../search";
 
 const Navbar = () => {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -61,45 +62,48 @@ const Navbar = () => {
                 <Container maxWidth={"lg"}>
                     <Toolbar>
                         
-                        <Box sx={{height: '100%', flexGrow: 1,}}>
-                            <Link to="/">
+                        <Box sx={{height: '100%', flexGrow: 1}}>
+                            <Link to="/" style={{display: 'block', width: 'fit-content'}} title="Clean YouTube">
                                 <img src="/logo.png" alt="" height={50} style={{margin: "auto 0", display: 'block'}} />
                             </Link>
                         </Box>
+                        <Search mob={mob} />
                         {!mob ? (
                             <>
-                                <IconButton
+                                {/* <IconButton
                                     color="primary"
                                     sx={{ color: "#fff" }}
                                     to="/"
                                     component={Link}
                                 >
                                     <HomeIcon />
-                                </IconButton>
+                                </IconButton> */}
                                 <IconButton
                                     color="primary"
                                     sx={{ color: "#fff" }}
                                     to="/favourites"
                                     component={Link}
+                                    title="Favourites"
                                 >
                                     <FavoriteIcon />
                                 </IconButton>
-                                <IconButton
+                                {/* <IconButton
                                     color="primary"
                                     sx={{ color: "#fff" }}
                                     to="/recents"
                                     component={Link}
                                 >
                                     <HistoryIcon />
-                                </IconButton>
+                                </IconButton> */}
                                 
-                                <Box style={{margin: '8px'}}></Box>
+                                {/* <Box style={{margin: '8px'}}></Box> */}
 
                                 <IconButton
                                     color="primary"
                                     sx={{ color: "#fff" }}
                                     to="/videos"
                                     component={Link}
+                                    title="Videos"
                                 >
                                     <VideoLibraryIcon />
                                 </IconButton>
@@ -108,6 +112,7 @@ const Navbar = () => {
                                     sx={{ color: "#fff" }}
                                     to="/playlists"
                                     component={Link}
+                                    title="Playlists"
                                 >
                                     <DnsIcon />
                                 </IconButton>
@@ -116,6 +121,7 @@ const Navbar = () => {
                                     sx={{ color: "#fff" }}
                                     to="/channels"
                                     component={Link}
+                                    title="Channels"
                                 >
                                     <MovieFilterIcon />
                                 </IconButton>
@@ -124,6 +130,7 @@ const Navbar = () => {
                                     sx={{ mx: 1, background: "#635985" }}
                                     color="secondary"
                                     onClick={handleClickOpen}
+                                    title="Add New"
                                 >
                                     Add
                                 </Button>

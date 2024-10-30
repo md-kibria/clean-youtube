@@ -13,6 +13,7 @@ import Video from "./pages/video";
 import Videos from "./pages/videos";
 import Playlists from "./pages/playlists";
 import Channels from "./pages/channels";
+import Search from "./pages/search";
 
 const App = () => {
     return (
@@ -23,6 +24,7 @@ const App = () => {
             <Container maxWidth={"lg"} px="2rem">
                 <Routes>
                     <Route path="/" element={<Home/>} />
+                    <Route path="/search" element={<Search />} />
                     <Route path="/favourites" element={<Favourites/>} />
                     <Route path="/recents" element={<Recents />} />
                     <Route path="/videos" element={<Videos />} />

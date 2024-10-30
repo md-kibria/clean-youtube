@@ -11,6 +11,7 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import PlayerLoader from "../../components/loader/player-page";
 import { toast } from "react-toastify";
 import responsiveHeight from "../../utils/responsiveHeight";
+import usePlaylist from "../../hooks/usePlaylist";
 
 const Player = () => {
     const [loading, setLoading] = useState(true);
@@ -35,6 +36,8 @@ const Player = () => {
     const { getPlaylist } = useStoreActions((state) => state.playlists);
     const { isLoading } = useStoreState((state) => state.playlists);
 
+    const {loadPlaylist} = usePlaylist()
+
     const [playlist, setPlaylist] = useState(
         playlists[playlistId] || { channelTitle: "", playlistItems: [] }
     );
@@ -58,14 +61,27 @@ const Player = () => {
         );
     };
 
+    const getLoadList = async () => {
+        const list = await loadPlaylist(playlistId);
+        console.log(list);
+        
+        setPlaylist(list);
+    }
+
+
     useEffect(() => {
         if (playlists[playlistId]) {
             setPlaylist(playlists[playlistId]);
             setLoading(false);
         } else {
-            getPlaylist(playlistId);
-            toast.warn("Playlist or video not found");
-            navigate("/404/Playlist or video not found");
+            // ⚡This is for save playlist and show playlist not found
+            // getPlaylist(playlistId);
+            // toast.warn("Playlist or video not found");
+            // navigate("/404/Playlist or video not found");
+
+            // This is form load video from YT and show
+            getLoadList()
+            setLoading(false);
         }
     }, [isLoading]);
 
@@ -107,6 +123,7 @@ const Player = () => {
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
+            rel: 0, // the player does not show related videos.
         },
     };
 
@@ -210,7 +227,7 @@ const Player = () => {
                     href={`https://youtube.com/channel/${channelId}`}
                     style={{color: '#222', textDecoration: 'none', display: 'flex', alignItems: 'center'}}
                 >
-                    <Avatar alt={channelTitle} src={logo.url} />
+                    <Avatar alt={channelTitle} src={logo?.url} />
                     <Typography variant="h6" ml="0.5rem" sx={{ flexGrow: 1 }}>
                         {channelTitle}
                     </Typography>
@@ -219,7 +236,7 @@ const Player = () => {
             <Typography variant="body1" color={"#aaa"} my="3px">
                 {new Date(videoPublishedAt).toDateString()}
             </Typography>
-            <Typography variant="body1" color={"#18122B"}>
+            <Typography variant="body1" color={"#18122B"} component="pre" whiteSpace="pre-wrap">
                 {description}
             </Typography>
         </Box>

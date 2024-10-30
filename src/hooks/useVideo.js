@@ -1,6 +1,7 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import getVideo from "../api/video";
 
 const initialVideo = {
     videoId: "",
@@ -78,18 +79,25 @@ const useVideo = (arg) => {
             removeFromFavourite({type: 'video', data: videoId})
             removeFromRecents({type: 'video', data: videoId})
             if(setvideo) history(-1);
-            toast.info("Video was successfully deleted!", {
+            toast.warn("Video was successfully removed!", {
                 position: "bottom-left",
                 autoClose: 2000
             });
         }
     };
 
+    // Load video from search
+    const loadVideo = async (id) => {
+        const video = await getVideo(id)
+        return video;
+    }
+
     return {
         videos,
         handleFavourite,
         handleDelete,
         initialVideo,
+        loadVideo
     };
 };
 

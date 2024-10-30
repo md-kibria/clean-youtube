@@ -16,11 +16,12 @@ import { toast } from "react-toastify";
 import usePlaylist from "../../hooks/usePlaylist";
 
 import {ProgressBar} from 'react-loader-spinner'
+import NotFound from "../../components/NotFound";
 
 const Playlist = () => {
     const [loading, setloading] = useState(true);
     const navigate = useNavigate();
-    const { handleFavourite, handleDelete, initialPlaylist } = usePlaylist();
+    const { handleFavourite, handleDelete, initialPlaylist, loadPlaylist } = usePlaylist();
 
     const [isFavourite, setIsFavourite] = useState(false);
     const favourites = useStoreState((state) => state.favourites.data.playlists);
@@ -54,6 +55,9 @@ const Playlist = () => {
     };
 
     const refreshHandle = () => {
+        return;
+        // make refresh functionality for each list seperately
+        // Now, If I refresh a list then its dissabled all list refresh button
         if(localStorage.getItem('rfs-time') < Date.now()) {
             refreshPlaylist(playlistId)
             setStatus(true)
@@ -72,14 +76,24 @@ const Playlist = () => {
         }
     }, []);
 
+    const getLoadList = async () => {
+        const list = await loadPlaylist(id);
+        setPlaylist(list);
+    }
+
     useEffect(() => {
         if (playlists[id]) {
             setPlaylist(playlists[id]);
             setloading(false);
         } else {
-            getPlaylist(id);
-            toast.warn("Playlist not found");
-            navigate("/404/Playlist not found");
+            // ⚡This is for save playlist and show playlist not found
+            // getPlaylist(id);
+            // toast.warn("Playlist not found");
+            // navigate("/404/Playlist not found");
+
+            // This is form load video from YT and show
+            getLoadList()
+            setloading(false);
         }
     }, [isLoading]);
 
@@ -115,10 +129,14 @@ const Playlist = () => {
         return <PlaylistLoader />;
     }
 
+    if(!playlistId) {
+        return <NotFound />
+    }
+
     return (
         <Grid container spacing={2} my="2rem">
             <Grid item lg={6} md={5} xs={12}>
-                <img src={playlistThumbnail.url} alt="" width={"100%"} />
+                <img src={playlistThumbnail?.url} alt="" width={"100%"} />
 
                 <Typography variant="h5" mt="1rem">
                     {playlistTitle}
@@ -129,7 +147,7 @@ const Playlist = () => {
                         href={`https://youtube.com/channel/${channelId}`}
                         style={{color: '#222', textDecoration: 'none', display: 'flex', alignItems: 'center'}}
                     >
-                        <Avatar alt={channelTitle} src={logo.url} />
+                        <Avatar alt={channelTitle} src={logo?.url} />
                         <Typography variant="h6" ml="0.5rem" sx={{ flexGrow: 1 }}>
                             {channelTitle}
                         </Typography>
@@ -145,7 +163,7 @@ const Playlist = () => {
                             borderColor = '#18122B'
                             barColor = '#635985'
                         /> }
-                        <IconButton onClick={refreshHandle} color={allow ? "error" : "default"}>
+                        <IconButton onClick={refreshHandle} color={allow ? "error" : "default"} title={allow ? "Refresh Playlist" : "You can refresh once a day"}>
                             <RotateLeftIcon />
                         </IconButton>
                         <IconButton onClick={favHandle} color="error">
@@ -166,7 +184,7 @@ const Playlist = () => {
                 <Typography variant="body1" color={"#aaa"} my="3px">
                     {new Date(publishedAt).toDateString()}
                 </Typography>
-                <Typography variant="body1" color={"#18122B"}>
+                <Typography variant="body1" color={"#18122B"} component="pre" whiteSpace="pre-wrap">
                     {playlistDescription}
                 </Typography>
             </Grid>
@@ -178,6 +196,7 @@ const Playlist = () => {
                             video={item}
                             indx={indx + 1}
                             playlistId={playlistId}
+                            channelTitle={channelTitle}
                         />
                     ))}
                 </Box>

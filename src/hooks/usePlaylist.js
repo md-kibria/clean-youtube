@@ -1,6 +1,7 @@
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import getPlaylist from "../api/playlist";
 
 const initialPlaylist = {
     playlistId: "",
@@ -78,18 +79,25 @@ const usePlaylist = (arg) => {
             removeFromFavourite({type: 'playlist', data: playlistId})
             removeFromRecents({type: 'playlist', data: playlistId})
             if(setPlaylist) history(-1);
-            toast.info("Playlist was successfully deleted!", {
+            toast.warn("Playlist was successfully removed!", {
                 position: "bottom-left",
                 autoClose: 2000
             });
         }
     };
 
+    // Load playlist from search
+    const loadPlaylist = async (id) => {
+        const playlist = await getPlaylist(id)
+        return playlist;
+    }
+
     return {
         playlists,
         handleFavourite,
         handleDelete,
         initialPlaylist,
+        loadPlaylist,
     };
 };
 

@@ -3,7 +3,7 @@ import useChannel from "../../hooks/useChannel";
 
 const Channels = () => {
     const {channels} = useChannel()
-    return <ChannelPage items={channels}/>
+    return <ChannelPage items={channels.reverse()}/>
 };
 
 export default Channels;

@@ -78,7 +78,7 @@ const useChannel = (arg) => {
             removeFromFavourite({type: 'channel', data: channelId})
             removeFromRecents({type: 'channel', data: channelId})
             if(setChannel) history(-1);
-            toast.info("Channel was successfully deleted!", {
+            toast.warn("Channel was successfully removed!", {
                 position: "bottom-left",
                 autoClose: 2000
             });

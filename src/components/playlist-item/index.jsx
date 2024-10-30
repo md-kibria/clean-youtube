@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
 
-const PlaylistItem = ({video, indx, playlistId, sidebar, sm}) => {
+const PlaylistItem = ({video, indx, playlistId, sidebar, sm, channelTitle}) => {
     const {title, thumbnail, contentDetails:{videoPublishedAt, videoId}} = video
 
     return (
@@ -10,13 +10,13 @@ const PlaylistItem = ({video, indx, playlistId, sidebar, sm}) => {
             <img 
             height={'100%'} 
             width={sm && '80px'}
-            src={thumbnail.url}
+            src={thumbnail?.url}
             alt="" />
 
-            <Box ml="1rem" sx={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
+            <Box ml="1rem" sx={{display: "flex", flexDirection: "column", justifyContent: "space-betweenX"}}>
                 <Typography color={'#635985'}>{sidebar ? title.substring(0, 36) + '...' : title.length > 72 ? title.substring(0, 72)+'...' : title}</Typography>
                 {/* <Typography color={'#635985'} fontSize={12}>{new Date(videoPublishedAt).toDateString().substring(3)}</Typography> */}
-                <Typography color={'#635985'} fontSize={15}>Stack Learner</Typography>
+                <Typography color={'#635985'} fontSize={15} pt={1}>{channelTitle}</Typography>
             </Box>
         </Box>
     )

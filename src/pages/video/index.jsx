@@ -12,10 +12,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import useVideo from "../../hooks/useVideo";
 import responsiveHeight from "../../utils/responsiveHeight";
+import NotFound from "../../components/NotFound";
 
 const Video = () => {
     const { id } = useParams();
-    const {handleFavourite, handleDelete, initialVideo} = useVideo()
+    const {handleFavourite, handleDelete, initialVideo, loadVideo} = useVideo()
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [plHeight, setPlHeight] = useState(550);
@@ -30,15 +31,24 @@ const Video = () => {
     const {data: videos, isLoading} = useStoreState((state) => state.videos);
     const { getVideo } = useStoreActions((state) => state.videos);
 
+    const getLoadVid = async () => {
+        const vid = await loadVideo(id);
+        setVideo(vid);
+    }
    
     useEffect(() => {
         if (videos[id]) {
             setVideo(videos[id]);
             setLoading(false);
         } else {
-            getVideo(id);
-            toast.warn("Playlist or video not found");
-            navigate("/404/Playlist or video not found");
+            // ⚡This is for save video and show video not found
+            // getVideo(id);
+            // toast.warn("Playlist or video not found");
+            // navigate("/404/Playlist or video not found");
+
+            // This is form load video from YT and show
+            getLoadVid()
+            setLoading(false);
         }
     }, [isLoading]);
 
@@ -78,6 +88,7 @@ const Video = () => {
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
+            rel: 0, // the player does not show related videos.
         },
     };
 
@@ -94,6 +105,10 @@ const Video = () => {
 
     if (loading) {
         return <PlayerLoader />;
+    }
+
+    if(!videoId) {
+        return <NotFound />
     }
 
     return (
@@ -115,7 +130,7 @@ const Video = () => {
                     href={`https://youtube.com/channel/${channelId}`}
                     style={{color: '#222', textDecoration: 'none', display: 'flex', alignItems: 'center'}}
                 >
-                    <Avatar alt={channelTitle} src={logo.url} />
+                    <Avatar alt={channelTitle} src={logo?.url} />
                     <Typography variant="h6" ml="0.5rem" sx={{ flexGrow: 1 }}>
                         {channelTitle}
                     </Typography>
@@ -140,7 +155,7 @@ const Video = () => {
             <Typography variant="body1" color={"#aaa"} my="3px">
                 {new Date(publishedAt).toDateString()}
             </Typography>
-            <Typography variant="body1" color={"#18122B"}>
+            <Typography variant="body1" color={"#18122B"} component="pre" whiteSpace="pre-wrap">
                 {description}
             </Typography>
         </Box>
